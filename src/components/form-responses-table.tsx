@@ -52,10 +52,8 @@ import {
   deleteForm,
   getForm,
 } from "@/lib/actions/forms.action";
-import { findReferralCodeByCode } from "@/lib/actions/referral_codes.action";
 import { Form, FormStatus, FormGender } from "@/lib/domains/forms.domain";
 import { toast } from "sonner";
-import { ReferralCode } from "@/lib/domains/referral_codes.domain";
 
 export function FormResponsesTable() {
   const [forms, setForms] = useState<Form[]>([]);
@@ -64,7 +62,6 @@ export function FormResponsesTable() {
   const [selectedForm, setSelectedForm] = useState<Form | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showDetailsDialog, setShowDetailsDialog] = useState(false);
-  const [refCodeData, setRefCodeData] = useState<ReferralCode | null>(null);
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -152,17 +149,6 @@ export function FormResponsesTable() {
       const response = await getForm(formId);
       if (response.success) {
         setSelectedForm(response.data as unknown as Form);
-
-        // Get referral code information
-        if (response.data!.ref_code_id) {
-          const refCodeResponse = await findReferralCodeByCode(
-            response.data!.ref_code_id
-          );
-          if (refCodeResponse.success) {
-            setRefCodeData(refCodeResponse.data! as unknown as ReferralCode);
-          }
-        }
-
         setShowDetailsDialog(true);
       } else {
         toast("Failed to load application details");
@@ -240,7 +226,6 @@ export function FormResponsesTable() {
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Reference Code</TableHead>
             <TableHead>Submitted</TableHead>
             <TableHead>Status</TableHead>
             <TableHead className="w-[100px]">Actions</TableHead>
@@ -250,7 +235,7 @@ export function FormResponsesTable() {
           {forms.length === 0 ? (
             <TableRow>
               <TableCell
-                colSpan={6}
+                colSpan={5}
                 className="text-center py-10 text-gray-500"
               >
                 No form responses found
@@ -261,7 +246,6 @@ export function FormResponsesTable() {
               <TableRow key={form.$id}>
                 <TableCell className="font-medium">{form.name}</TableCell>
                 <TableCell>{form.email}</TableCell>
-                <TableCell className="font-mono">{form.ref_code_id}</TableCell>
                 <TableCell>{formatDate(form.submitted_at)}</TableCell>
                 <TableCell>{getStatusBadge(form.status)}</TableCell>
                 <TableCell>
@@ -438,24 +422,6 @@ export function FormResponsesTable() {
                   )}
                 </div>
               </div>
-
-              <div>
-                <h3 className="font-semibold text-sm text-gray-500">
-                  Reference Code
-                </h3>
-                <div className="mt-1 font-mono">{selectedForm.ref_code_id}</div>
-              </div>
-
-              {refCodeData && (
-                <div>
-                  <h3 className="font-semibold text-sm text-gray-500">
-                    Reference Code ID
-                  </h3>
-                  <div className="mt-1 text-xs font-mono truncate">
-                    {refCodeData.$id}
-                  </div>
-                </div>
-              )}
 
               <div>
                 <h3 className="font-semibold text-sm text-gray-500">

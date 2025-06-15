@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FileText, KeyRound, Briefcase } from "lucide-react";
+import { FileText, Briefcase } from "lucide-react";
 
 import {
   Card,
@@ -22,29 +22,6 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Link href="/admin/ref_code">
-          <Card className="h-full hover:shadow-lg transition-all duration-300 border-0 shadow-md bg-gradient-to-br from-white to-purple-50 cursor-pointer overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-purple-500/0 rounded-lg -z-10"></div>
-            <CardHeader>
-              <div className="flex items-center mb-2">
-                <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300">
-                  <KeyRound className="h-5 w-5 text-purple-600" />
-                </div>
-                <CardTitle className="text-xl">Reference Codes</CardTitle>
-              </div>
-              <CardDescription>
-                Generate and manage reference codes for applicants
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">
-                Create, view, and manage reference codes used by applicants
-                during the application process.
-              </p>
-            </CardContent>
-          </Card>
-        </Link>
-
         <Link href="/admin/available_jobs">
           <Card className="h-full hover:shadow-lg transition-all duration-300 border-0 shadow-md bg-gradient-to-br from-white to-green-50 cursor-pointer overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-green-500/0 rounded-lg -z-10"></div>
