@@ -52,6 +52,13 @@ export function AdminNav() {
             Dashboard
           </Link>
           <Link
+            href="/admin/ref_code"
+            className="text-sm font-medium transition-colors hover:text-purple-600 flex items-center"
+          >
+            <KeyRound className="mr-1 h-4 w-4" />
+            Reference Codes
+          </Link>
+          <Link
             href="/admin/available_jobs"
             className="text-sm font-medium transition-colors hover:text-purple-600 flex items-center"
           >

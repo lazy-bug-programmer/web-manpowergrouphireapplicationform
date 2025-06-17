@@ -38,6 +38,7 @@ import {
 import { toast } from "sonner";
 
 import { createForm } from "@/lib/actions/forms.action";
+import { validateReferralCode } from "@/lib/actions/referral_codes.action";
 import { FormGender } from "@/lib/domains/forms.domain";
 
 const formSchema = z.object({
@@ -49,6 +50,9 @@ const formSchema = z.object({
   }),
   age: z.number().min(21, { message: "You must be at least 21 years old." }),
   nationality: z.string().min(2, { message: "Please enter your nationality." }),
+  refCode: z
+    .string()
+    .min(6, { message: "Reference code must be at least 6 characters." }),
   requirement: z.boolean().refine((val) => val === true, {
     message: "You must have a local bank account to apply.",
   }),
@@ -57,6 +61,7 @@ const formSchema = z.object({
 export function ApplicationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [refCodeError, setRefCodeError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -67,14 +72,47 @@ export function ApplicationForm() {
       gender: undefined,
       age: 21,
       nationality: "",
+      refCode: "",
       requirement: false,
     },
   });
 
+  // Function to validate reference code
+  const validateRefCode = async (code: string) => {
+    try {
+      const response = await validateReferralCode(code);
+      if (!response.valid) {
+        setRefCodeError("Invalid reference code. Please check and try again.");
+        return false;
+      }
+      setRefCodeError(null);
+      return true;
+    } catch {
+      setRefCodeError("Failed to validate reference code. Please try again.");
+      return false;
+    }
+  };
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
+    setRefCodeError(null);
 
     try {
+      // First validate the reference code
+      const isRefCodeValid = await validateRefCode(values.refCode);
+      if (!isRefCodeValid) {
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Get the reference code ID
+      const refCodeResponse = await validateReferralCode(values.refCode);
+      if (!refCodeResponse.success) {
+        setRefCodeError("Invalid reference code. Please check and try again.");
+        setIsSubmitting(false);
+        return;
+      }
+
       // Convert string gender to numeric enum
       const genderValue =
         values.gender === "male" ? FormGender.MALE : FormGender.FEMALE;
@@ -93,6 +131,7 @@ export function ApplicationForm() {
         age: values.age,
         nationality: values.nationality,
         requirement: values.requirement,
+        ref_code_id: values.refCode,
       });
 
       if (response.success) {
@@ -207,14 +246,18 @@ export function ApplicationForm() {
                           width: "100%",
                           height: "40px",
                           fontSize: "16px",
-                          borderColor: "rgb(209, 213, 219)",
+                          borderColor: refCodeError
+                            ? "rgb(239, 68, 68)"
+                            : "rgb(209, 213, 219)",
                         }}
                         containerStyle={{
                           width: "100%",
                         }}
                         buttonStyle={{
                           backgroundColor: "white",
-                          borderColor: "rgb(209, 213, 219)",
+                          borderColor: refCodeError
+                            ? "rgb(239, 68, 68)"
+                            : "rgb(209, 213, 219)",
                           borderWidth: "1px",
                           borderRightWidth: "0px",
                         }}
@@ -291,6 +334,42 @@ export function ApplicationForm() {
                         className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200"
                       />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="refCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700">
+                      Reference Code
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your reference code"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e.target.value.toUpperCase());
+                          setRefCodeError(null); // Clear error when changing value
+                        }}
+                        className={`border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200 ${
+                          refCodeError ? "border-red-500" : ""
+                        }`}
+                      />
+                    </FormControl>
+                    <FormDescription className="text-xs">
+                      You should have received a reference code from our team.
+                    </FormDescription>
+                    {refCodeError && (
+                      <p className="text-sm font-medium text-red-500 mt-1">
+                        {refCodeError}
+                      </p>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}

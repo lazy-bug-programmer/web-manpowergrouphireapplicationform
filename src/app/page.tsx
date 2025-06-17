@@ -1,6 +1,5 @@
 "use client";
 
-import { ApplicationForm } from "@/components/application-form";
 import { AvailableJobsSection } from "@/components/available-jobs-section";
 import Link from "next/link";
 
@@ -33,37 +32,37 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="flex items-center space-x-8">
               <a
                 href="#solutions"
-                className="text-slate-600 hover:text-slate-800 font-medium transition-colors"
+                className="hidden md:inline-block text-slate-600 hover:text-slate-800 font-medium transition-colors"
               >
                 Solutions
               </a>
               <Link
                 href="/opportunities"
-                className="text-slate-600 hover:text-slate-800 font-medium transition-colors"
+                className="hidden md:inline-block text-slate-600 hover:text-slate-800 font-medium transition-colors"
               >
                 Opportunities
               </Link>
               <a
                 href="#stats"
-                className="text-slate-600 hover:text-slate-800 font-medium transition-colors"
+                className="hidden md:inline-block text-slate-600 hover:text-slate-800 font-medium transition-colors"
               >
                 Industries
               </a>
               <a
                 href="#footer"
-                className="text-slate-600 hover:text-slate-800 font-medium transition-colors"
+                className="hidden md:inline-block text-slate-600 hover:text-slate-800 font-medium transition-colors"
               >
                 About
               </a>
-              <a
-                href="#careers"
-                className="bg-slate-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-slate-700 transition-colors shadow-md"
+              <Link
+                href={"/apply"}
+                className="bg-slate-800 text-white px-3 py-2 text-center rounded-lg font-semibold hover:bg-slate-700 transition-colors shadow-md"
               >
                 Apply Now
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -518,58 +517,12 @@ export default function Home() {
             Join thousands of professionals who have elevated their careers
             through ManpowerGroup&apos;s comprehensive workforce solutions
           </p>
-          <button
-            onClick={() =>
-              document
-                .getElementById("careers")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white px-12 py-5 rounded-lg font-semibold text-lg hover:from-emerald-600 hover:to-cyan-600 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+          <Link
+            href="/apply"
+            className="inline-block bg-gradient-to-r from-emerald-500 to-cyan-500 text-white px-12 py-5 rounded-lg font-semibold text-lg hover:from-emerald-600 hover:to-cyan-600 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
           >
             Begin Application
-          </button>
-        </div>
-      </section>
-
-      {/* Application Form Section */}
-      <section
-        id="careers"
-        className="py-24 bg-gradient-to-b from-slate-50 to-white"
-      >
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto">
-            <div className="mb-12 text-center">
-              <div className="inline-block p-3 bg-slate-800/5 border border-slate-200 rounded-2xl mb-6">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-slate-700"
-                >
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="9" cy="7" r="4"></circle>
-                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-800 mb-4">
-                Join Our Team
-              </h1>
-              <div className="h-1 w-24 bg-gradient-to-r from-emerald-500 to-cyan-500 mx-auto mb-6"></div>
-              <p className="text-lg text-slate-600 max-w-lg mx-auto leading-relaxed">
-                We&apos;re seeking exceptional individuals to help shape the
-                future of work. Please share your professional details to begin
-                your journey with us.
-              </p>
-            </div>
-            <ApplicationForm />
-          </div>
+          </Link>
         </div>
       </section>
 

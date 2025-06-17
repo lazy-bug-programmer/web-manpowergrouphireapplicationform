@@ -27,6 +27,7 @@ export async function createForm(
         nationality: form.nationality,
         gender: form.gender,
         requirement: form.requirement,
+        ref_code_id: form.ref_code_id,
         submitted_at: new Date().toISOString(),
         status: FormStatus.SUBMITTED,
       }

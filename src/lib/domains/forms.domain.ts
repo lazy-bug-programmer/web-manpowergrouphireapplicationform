@@ -7,6 +7,7 @@ export interface Form {
   nationality: string;
   gender: FormGender;
   requirement: boolean;
+  ref_code_id: string;
   submitted_at: Date;
   status: FormStatus;
 }
